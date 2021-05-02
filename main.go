@@ -17,9 +17,12 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/AkarinVS/eac3to-wrapper/mkv"
 )
+
+const prefix = "eac3to-wrapper"
 
 var (
 	// path to essential executables
@@ -62,7 +65,18 @@ func findExe(name string, altdir ...string) (path string) {
 
 // checkEnv checks if the execution environment is sane.
 func checkEnv() {
-	// TODO: open a log file unless $EAC3TO_WRAPPER_DEV is set.
+	if os.Getenv("EAC3TO_WRAPPER_DEV") == "" {
+		logf := fmt.Sprintf("%s-%s.log", prefix, time.Now().Format("20060102"))
+		for _, dir := range []string{"./log", "../../log"} {
+			fn := filepath.Join(dir, logf)
+			fd, err := os.OpenFile(fn, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			if err == nil {
+				log.SetOutput(fd)
+				fmt.Fprintf(os.Stderr, "log file at %s\n", fn)
+				break
+			}
+		}
+	}
 	// There are three different places eac3to-wrapper could be placed:
 	// (1) during development, at the same directory with mkv{extract,merge} and eac3to.
 	// (2) under tools/eac3to.
@@ -194,7 +208,7 @@ func parseEac3toArgs(args []string) (newArgs []string, mkvFile string, tracks []
 }
 
 func main() {
-	log.SetPrefix("eac3to-wrapper: ")
+	log.SetPrefix(prefix + ": ")
 	log.SetFlags(0)
 
 	checkEnv()
