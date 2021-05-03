@@ -12,10 +12,14 @@ jobs:
         goarch: ["386", amd64]
     steps:
     - uses: actions/checkout@v2
+    - name: extract tag name
+      shell: bash
+      run: echo "TAG_NAME=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
     - uses: wangyoucao577/go-release-action@v1.17
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
         goversion: 1.16
+        ldflags: -X main.version=${{ env.TAG_NAME }}
         extra_files: LICENSE README.md
