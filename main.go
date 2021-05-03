@@ -25,6 +25,7 @@ import (
 const prefix = "eac3to-wrapper"
 
 var (
+	version string = "unknown" // fill when building, with -ldflags=-X
 	// path to essential executables
 	mkvExtractPath string
 	mkvMergePath   string
@@ -211,7 +212,7 @@ func parseEac3toArgs(args []string) (newArgs []string, mkvFile string, tracks []
 
 func main() {
 	checkEnv()
-	log.Printf("command line %q", os.Args)
+	log.Printf("version %s, command line %q", version, os.Args)
 
 	nargs, mkvf, tracks := parseEac3toArgs(os.Args[1:])
 	if mkvf != "" && len(tracks) > 0 {
