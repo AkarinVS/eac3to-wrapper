@@ -72,7 +72,9 @@ func checkEnv() {
 			fd, err := os.OpenFile(fn, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 			if err == nil {
 				log.SetOutput(fd)
+				log.SetFlags(log.Ltime) // no need to output Ldate to dated log file
 				fmt.Fprintf(os.Stderr, "log file at %s\n", fn)
+				redirectStderr(fd)
 				break
 			}
 		}
@@ -208,9 +210,6 @@ func parseEac3toArgs(args []string) (newArgs []string, mkvFile string, tracks []
 }
 
 func main() {
-	log.SetPrefix(prefix + ": ")
-	log.SetFlags(0)
-
 	checkEnv()
 	log.Printf("command line %q", os.Args)
 
