@@ -232,10 +232,12 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		log.Printf("mkvextract succeeded.")
 	}
 
 	err := run(eac3toPath, nargs)
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("%s succeeded.", prefix)
 }
