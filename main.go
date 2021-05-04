@@ -135,7 +135,9 @@ func getTrackMapping(info *mkv.Info) []int {
 	return mapping
 }
 
-func run(prog string, args []string) error {
+// run executes the given program with the given arguments.
+// If captureStdout is true, then stdout will be redirected to stderr.
+func run(prog string, args []string, captureStdout bool) error {
 	cmd := exec.Command(prog, args...)
 	log.Printf("running %v", cmd)
 	// XXX: workaround golang/go#45914.
@@ -149,7 +151,11 @@ func run(prog string, args []string) error {
 		return err
 	}
 	defer errpipe.Close()
-	go io.Copy(os.Stdout, outpipe)
+	if captureStdout {
+		go io.Copy(os.Stderr, outpipe)
+	} else {
+		go io.Copy(os.Stdout, outpipe)
+	}
 	go io.Copy(os.Stderr, errpipe)
 	return cmd.Run()
 }
@@ -229,14 +235,14 @@ func main() {
 		for _, trk := range tracks {
 			extArgs = append(extArgs, fmt.Sprintf("%d:%s", mapping[trk.Id], trk.Filename))
 		}
-		err = run(mkvExtractPath, extArgs)
+		err = run(mkvExtractPath, extArgs, true)
 		if err != nil {
 			log.Fatal(err)
 		}
 		log.Printf("mkvextract succeeded.")
 	}
 
-	err := run(eac3toPath, nargs)
+	err := run(eac3toPath, nargs, false)
 	if err != nil {
 		log.Fatal(err)
 	}
