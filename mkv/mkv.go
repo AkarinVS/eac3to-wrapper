@@ -28,6 +28,10 @@ type Track struct {
 	TrackProperty `json:"properties"`
 }
 
+func (t *Track) GoString() string {
+	return fmt.Sprintf("%#v", *t)
+}
+
 // TrackType represents the type of a track: video/audio or subtitle.
 type TrackType int8
 
