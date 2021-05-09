@@ -67,13 +67,13 @@ func findExe(name string, altdir ...string) (path string) {
 // checkEnv checks if the execution environment is sane.
 func checkEnv() {
 	if os.Getenv("EAC3TO_WRAPPER_DEV") == "" {
-		logf := fmt.Sprintf("%s-%s.log", prefix, time.Now().Format("20060102"))
+		logf := fmt.Sprintf("%s_%s_%04X.log", "EAC", time.Now().Format("20060102-1504"), os.Getpid())
 		for _, dir := range []string{"./log", "../../log"} {
 			fn := filepath.Join(dir, logf)
 			fd, err := os.OpenFile(fn, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 			if err == nil {
 				log.SetOutput(fd)
-				log.SetFlags(log.Ltime) // no need to output Ldate to dated log file
+				log.SetFlags(log.Lmicroseconds) // no need to output Ldate to dated log file
 				fmt.Fprintf(os.Stderr, "log file at %s\n", fn)
 				redirectStderr(fd)
 				break
