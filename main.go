@@ -83,10 +83,9 @@ func checkEnv() {
 	// There are three different places eac3to-wrapper could be placed:
 	// (1) during development, at the same directory with mkv{extract,merge} and eac3to.
 	// (2) under tools/eac3to.
-	// (3) at the same directory as OKEGui.exe.
-	mkvExtractPath = findExe("mkvextract", "../mkvtoolnix", "tools/mkvtoolnix")
-	mkvMergePath = findExe("mkvmerge", "../mkvtoolnix", "tools/mkvtoolnix")
-	eac3toPath = findExe("eac3to", "../eac3to", "tools/eac3to", "../eac3to.real")
+	mkvExtractPath = findExe("mkvextract", "../mkvtoolnix")
+	mkvMergePath = findExe("mkvmerge", "../mkvtoolnix")
+	eac3toPath = findExe("eac3to", "../eac3to", "../eac3to.real")
 	if mkvExtractPath == "" || mkvMergePath == "" || eac3toPath == "" {
 		log.Fatal("unable to locate essential programs, abort")
 	}
