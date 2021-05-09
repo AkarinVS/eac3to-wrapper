@@ -5,12 +5,11 @@ eac3to-wrapper aims to fix eac3to's long standing [bug 288](http://bugs.madshi.n
 
 To build, first install Go from [golang.org/dl](https://golang.org/dl/), then:
 ```bat
-go build
+go build -ldflags "-X main.version=VERSION"
 ```
-and copy the executable to the directory where OKEGui.exe resides.
-(Note: this requires modified OKEGui, or you can follow the [Testing procedure](#Testing) to install
-without a modified OKEGui.).
-
+and copy the executable to the directory OKEGui/tools/eac3to.
+(Note: this requires v7.0+ OKEGui, or you can follow the [Testing procedure](#Testing) to install
+with a previous OKEGui version.)
 
 Testing
 -------
