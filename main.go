@@ -201,6 +201,15 @@ func parseEac3toArgs(args []string) (newArgs []string, mkvFile string, tracks []
 					trk.Filename = args[i+1]
 					newArgs = append(newArgs, trk.Filename)
 					i++
+				} else {
+					// we proactively split the extraction into the canonical
+					// two argument "TID:" "FILENAME" format to workaround
+					// Windows' command line issue:
+					// eac3to implements its own command line argument splitter,
+					// and it will treat 2:"file name.flac" differently from
+					// "2:file name.flac".
+					newArgs = newArgsPrev
+					newArgs = append(newArgs, fmt.Sprintf("%d:", trk.Id), trk.Filename)
 				}
 				// only intercept *.sup extractions from *.mkv
 				if mkvFile != "" && fileHasSuffix(trk.Filename, ".sup") {

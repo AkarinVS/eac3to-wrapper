@@ -36,3 +36,5 @@ It only recognizes the following forms:
 2. `eac3to input.mkv TID1: out1.flac TID2: out2.sup ...`
 
 All unrecognized forms will be passed through to original eac3to in verbatim.
+
+Due to complications arising from Windows' support of command line arguments, the first form is proactively split into the second form.
