@@ -15,11 +15,11 @@ jobs:
     - name: extract tag name
       shell: bash
       run: echo "TAG_NAME=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
-    - uses: wangyoucao577/go-release-action@v1.17
+    - uses: wangyoucao577/go-release-action@v1.22
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
-        goversion: 1.16
+        goversion: 1.17
         ldflags: -X main.version=${{ env.TAG_NAME }}
         extra_files: LICENSE README.md

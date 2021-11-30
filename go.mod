@@ -1,3 +1,3 @@
 module github.com/AkarinVS/eac3to-wrapper
 
-go 1.16
+go 1.17

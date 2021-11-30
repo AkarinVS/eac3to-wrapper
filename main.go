@@ -7,7 +7,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -139,23 +138,11 @@ func getTrackMapping(info *mkv.Info) []int {
 func run(prog string, args []string, captureStdout bool) error {
 	cmd := exec.Command(prog, args...)
 	log.Printf("running %v", cmd)
-	// XXX: workaround golang/go#45914.
-	outpipe, err := cmd.StdoutPipe()
-	if err != nil {
-		return err
-	}
-	defer outpipe.Close()
-	errpipe, err := cmd.StderrPipe()
-	if err != nil {
-		return err
-	}
-	defer errpipe.Close()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	if captureStdout {
-		go io.Copy(os.Stderr, outpipe)
-	} else {
-		go io.Copy(os.Stdout, outpipe)
+		cmd.Stdout = os.Stderr
 	}
-	go io.Copy(os.Stderr, errpipe)
 	return cmd.Run()
 }
 
